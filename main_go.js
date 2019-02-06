@@ -93,26 +93,9 @@ function map() {
 	});
 }
 
-function sumbitImage(e){
-	console.log("doing");
-	alert("Sending");
-    e.preventDefault();
-    var url=$(this).closest('form').attr('action'),
-    data=$(this).closest('form').serialize();
-    $.ajax({
-        url:url,
-        type:'post',
-        data:data,
-        success:function(){
-			alert("Sent!");
-       }
-   });
-}
-
 $(document).ready(function () {
 	/* Set up handlers */
 	$(".tab").click(tabClicked); // Handle clicks on "credit cards"
-	//$("form").submit(sumbitImage);
 	start.publish(go);
 }
 );
