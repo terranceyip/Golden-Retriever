@@ -1,58 +1,52 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8" />
+  <meta charset="utf-8" />
 
-<script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
-<script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+  <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+  <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
 
-<script type="text/javascript" type="text/javascript">
-  // Connecting to ROS
-  // -----------------
+  <script type="text/javascript" type="text/javascript">
+    // Connecting to ROS
+    // -----------------
 
-  var ros = new ROSLIB.Ros({
-    url : 'ws://192.168.137.66:9090'
-  });
+    var ros = new ROSLIB.Ros({
+      url: 'ws://192.168.137.66:9090'
+    });
 
-  ros.on('connection', function() {
-    console.log('Connected to websocket server.');
-  });
+    ros.on('connection', function () {
+      console.log('Connected to websocket server.');
+    });
 
-  ros.on('error', function(error) {
-    console.log('Error connecting to websocket server: ', error);
-  });
+    ros.on('error', function (error) {
+      console.log('Error connecting to websocket server: ', error);
+    });
 
-  ros.on('close', function() {
-    console.log('Connection to websocket server closed.');
-  });
+    ros.on('close', function () {
+      console.log('Connection to websocket server closed.');
+    });
 
-  // Publishing a Topic
-  // ------------------
+    // Publishing a Topic
+    // ------------------
 
-  var start = new ROSLIB.Topic({
-    ros : ros,
-    name : '/plswork',
-    messageType : 'std_msgs/Bool'
-  });
+    var start = new ROSLIB.Topic({
+      ros: ros,
+      name: '/plswork',
+      messageType: 'std_msgs/Bool'
+    });
 
-  var go = new ROSLIB.Message({
-      data:imageExists()
-  });
+    var go = new ROSLIB.Message({
+      data: true
+    });
+    start.publish(go);
 
-  function imageExists(){
-    	var http = new XMLHttpRequest();
-    	http.open('HEAD', "item.png", false);
-    	http.send();
-    	return http.status!=404;
-	}
-
-  start.publish(go);
-
-</script>
+  </script>
 </head>
 
 <body>
   <h1>Simple roslib Example</h1>
   <p>Check your Web Console for output.</p>
 </body>
+
 </html>

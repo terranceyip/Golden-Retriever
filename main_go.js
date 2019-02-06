@@ -1,5 +1,34 @@
 active = "1";
 
+var ros = new ROSLIB.Ros({
+	url: 'ws://192.168.137.66:9090'
+  });
+
+  ros.on('connection', function () {
+	console.log('Connected to websocket server.');
+  });
+
+  ros.on('error', function (error) {
+	console.log('Error connecting to websocket server: ', error);
+  });
+
+  ros.on('close', function () {
+	console.log('Connection to websocket server closed.');
+  });
+
+  // Publishing a Topic
+  // ------------------
+
+  var start = new ROSLIB.Topic({
+	ros: ros,
+	name: '/plswork',
+	messageType: 'std_msgs/Bool'
+  });
+
+  var go = new ROSLIB.Message({
+	data: true
+  });
+
 function tabClicked(e) {
 	var tabVal = $(this).attr("id");
 	var sel = "#" + active;
@@ -84,5 +113,6 @@ $(document).ready(function () {
 	/* Set up handlers */
 	$(".tab").click(tabClicked); // Handle clicks on "credit cards"
 	//$("form").submit(sumbitImage);
+	start.publish(go);
 }
 );
