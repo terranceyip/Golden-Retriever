@@ -26,7 +26,7 @@ class S(BaseHTTPRequestHandler):
 
 
     def send_webpage(self, sitefile):
-        if (".png" in sitefile) or (".jpg" in sitefile) or (".gif" in sitefile) or (".bmp" in sitefile) or (".ico" in sitefile) :
+        if (".png" in sitefile) or (".jpg" in sitefile) or (".gif" in sitefile) or (".bmp" in sitefile):
             self._set_headers_image(sitefile, sitefile[-3:])
             image = open(sitefile,'rb')
             self.wfile.write(image.read())
@@ -59,7 +59,7 @@ class S(BaseHTTPRequestHandler):
             self.send_response(404)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
-            self.wfile.write("<html><body>bad url</body></html>")
+            self.wfile.write("<html><body>404 not found</body></html>")
 
 
     def parse_POST(self):
@@ -82,12 +82,37 @@ class S(BaseHTTPRequestHandler):
         #print postvars.keys()
         #print type(postvars["item"])
         #print len(postvars["item"])
-        post_data = (postvars["item"])[0]
-        location = open("item.png", 'w+b')
-        location.write(post_data)
-        location.close()
-        self.send_response(200)
-        self.send_webpage("accpeted.html")
+        if ("item" in postvars.keys()):
+            post_data = (postvars["item"])[0]
+            location = open("item.png", 'w+b')
+            location.write(post_data)
+            location.close()
+            self.send_response(200)
+            self.send_webpage("accpeted.html")
+        elif ("found" in postvars.keys()):
+            post_data = (postvars["found"])[0]
+            location = open("found.txt", 'w')
+            location.write(post_data)
+            location.close()
+            self.send_response(200)
+            self.send_webpage("accpeted.html")
+        else:
+            content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
+            post_data = self.rfile.read(content_length) # <--- Gets the data itself
+            if ("found" in post_data):
+                location = open("found.txt", 'w')
+            else:
+                location = open("error.txt", 'w')
+            location.write(post_data)
+            location.close()
+
+            self.send_response(400)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write("<html><body>400 bad request</body></html>")
+
+
+
         #for line in (postvars["file"]):
         #    location.write(line) # <-- Print post data
         #self._set_headers()
